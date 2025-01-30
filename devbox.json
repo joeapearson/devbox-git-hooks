@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.7/.schema/devbox.schema.json",
+  "packages": ["nodePackages.prettier@latest", "shellcheck@latest"],
+  "shell": {
+    "init_hook": ["echo 'Welcome to devbox!' > /dev/null"],
+    "scripts": {
+      "pre-commit": ["devbox run format", "devbox run lint"],
+      "format": ["prettier --write ."],
+      "lint": ["shellcheck config/*"]
+    }
+  },
+  "include": ["path:./plugin.json"]
+}

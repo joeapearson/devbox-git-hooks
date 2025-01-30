@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+PREFIX="devbox-git-hooks"
+
+info() {
+  echo -e "\e[32m$PREFIX: $1\e[0m"
+}
+
+warning() {
+  echo -e "\e[33m$PREFIX: $1\e[0m"
+}
+
+if [ -n "$CI" ]; then
+  warning "devbox-git-hooks: CI environment detected. Skipping git hook installation."
+  exit 0
+fi
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+
+HOOKS='pre-commit|commit-msg|post-commit|pre-rebase|post-rewrite|pre-push|pre-merge-commit|prepare-commit-msg|post-merge|post-checkout|post-update|pre-applypatch|applypatch-msg|post-applypatch|pre-receive|update|post-receive|post-rewrite|push-to-checkout'
+DEFINED_HOOKS=$(devbox run -l | grep -E $HOOKS | sed 's/^* //')
+
+for HOOK in "${DEFINED_HOOKS[@]}"; do
+  HOOK_PATH=".git/hooks/$HOOK"
+  if [ -f "$HOOK_PATH" ]; then
+    if ! grep -q "Managed by devbox-git-hooks" "$HOOK_PATH"; then
+      warning "Pre-existing $HOOK hook found at $HOOK_PATH. Skipping."
+    fi
+  else
+    cp "$HERE/hook" "$HOOK_PATH"
+    sed -i "s/SCRIPT/$HOOK/g" "$HOOK_PATH"
+    chmod +x "$HOOK_PATH"
+    info "Installed $HOOK hook."
+  fi
+done

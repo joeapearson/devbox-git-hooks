@@ -1,0 +1,16 @@
+{
+  "name": "git-hooks",
+  "version": "0.0.1",
+  "description": "Integrates git hooks into devbox.",
+  "packages": [],
+  "env": {},
+  "create_files": {
+    "{{ .Virtenv }}/init": "config/init",
+    "{{ .Virtenv }}/hook": "config/hook"
+  },
+  "shell": {
+    "init_hook": ["chmod +x {{ .Virtenv }}/init", "{{ .Virtenv }}/init"],
+    "scripts": {}
+  },
+  "include": []
+}
