@@ -11,7 +11,7 @@ warning() {
 }
 
 if [ -n "$CI" ]; then
-  warning "devbox-git-hooks: CI environment detected. Skipping git hook installation."
+  warning "CI environment detected. Skipping git hook installation."
   exit 0
 fi
 
