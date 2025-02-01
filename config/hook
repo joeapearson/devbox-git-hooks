@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Runs devbox run SCRIPT from the project root directory
+# Managed by devbox-git-hooks - don't edit this file directly.
+
+# .git/hooks
+HERE="$(cd "$(dirname "$0")" && pwd)"
+
+cd "$HERE/../.." || exit 1
+
+devbox run SCRIPT
