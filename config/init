@@ -17,11 +17,16 @@ fi
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
+if [ ! -d "$GIT_HOOKS_PATH" ]; then
+  warning "Git hooks directory not found at $GIT_HOOKS_PATH. Is this really a git repository?"
+  exit 0
+fi
+
 HOOKS='pre-commit|commit-msg|post-commit|pre-rebase|post-rewrite|pre-push|pre-merge-commit|prepare-commit-msg|post-merge|post-checkout|post-update|pre-applypatch|applypatch-msg|post-applypatch|pre-receive|update|post-receive|post-rewrite|push-to-checkout'
 DEFINED_HOOKS=$(devbox run -l | grep -E $HOOKS | sed 's/^* //')
 
 for HOOK in "${DEFINED_HOOKS[@]}"; do
-  HOOK_PATH=".git/hooks/$HOOK"
+  HOOK_PATH="$GIT_HOOKS_PATH/$HOOK"
   if [ -f "$HOOK_PATH" ]; then
     if ! grep -q "Managed by devbox-git-hooks" "$HOOK_PATH"; then
       warning "Pre-existing $HOOK hook found at $HOOK_PATH. Skipping."

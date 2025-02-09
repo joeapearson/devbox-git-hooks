@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Integrates git hooks into devbox.",
   "packages": [],
-  "env": {},
+  "env": {
+    "GIT_HOOKS_PATH": "{{ .DevboxProjectDir }}/.git/hooks"
+  },
   "create_files": {
     "{{ .Virtenv }}/init": "config/init",
     "{{ .Virtenv }}/hook": "config/hook"
